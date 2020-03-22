@@ -18,12 +18,12 @@
           </execution>
         </executions>
         <configuration>
-          <configLocation>checkstyle.xml</configLocation>
+          <configLocation>checkStyle.xml</configLocation>
         </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.8.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -31,7 +31,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.1</version>
+        <version>3.2.2</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -52,8 +52,7 @@
     </plugins>
   </build>
   <properties>
-    <dropwizard.version>2.0.0</dropwizard.version>
+    <dropwizard.version>2.0.2</dropwizard.version>
     <checkstyle-maven-plugin.version>3.1.1</checkstyle-maven-plugin.version>
   </properties>
 </project>
-

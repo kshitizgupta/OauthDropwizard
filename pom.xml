@@ -40,7 +40,9 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>${checkstyle-maven-plugin.version}</version>
 				<configuration>
-					<configLocation>checkstyle.xml</configLocation>
+					<configLocation>
+						checkStyle.xml
+					</configLocation>
 				</configuration>
 				<executions>
 					<execution>
