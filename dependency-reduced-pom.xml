@@ -8,6 +8,20 @@
     <finalName>DropWizardDemo-${version}</finalName>
     <plugins>
       <plugin>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <configLocation>checkstyle.xml</configLocation>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
@@ -39,6 +53,7 @@
   </build>
   <properties>
     <dropwizard.version>2.0.0</dropwizard.version>
+    <checkstyle-maven-plugin.version>3.1.1</checkstyle-maven-plugin.version>
   </properties>
 </project>
 
