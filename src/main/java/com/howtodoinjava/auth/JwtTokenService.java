@@ -1,10 +1,12 @@
 package com.howtodoinjava.auth;
 
+import com.sun.jdi.request.InvalidRequestStateException;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.glassfish.jersey.client.authentication.RequestAuthenticationException;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jwk.RsaJwkGenerator;
@@ -16,11 +18,13 @@ import org.jose4j.jwt.consumer.ErrorCodes;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
+import org.jose4j.jwx.JsonWebStructure;
 import org.jose4j.lang.JoseException;
 
 public class JwtTokenService {
     public static String ISSUER = "DropwizardDemo";
     private final KeyStore keyStore = new KeyStore();
+    final String AUDIENCE = "Audience";
 
     public String createJWT()
         throws JoseException, MalformedClaimException {
@@ -28,6 +32,7 @@ public class JwtTokenService {
         RsaJsonWebKey rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
         rsaJsonWebKey.setKeyId(String.valueOf(new Date().getTime()));
 
+        keyStore.addKey(rsaJsonWebKey);
         // Create the claims
         JwtClaims claims = new JwtClaims();
         claims.setIssuer(ISSUER);
@@ -50,8 +55,6 @@ public class JwtTokenService {
 
         String jwt = jws.getCompactSerialization();
 
-        System.out.println("JWT: " + jwt);
-
         return jwt;
     }
 
@@ -64,8 +67,8 @@ public class JwtTokenService {
             // clock skew
             .setRequireSubject() // the JWT must have a subject claim
             .setExpectedIssuer(ISSUER) // whom the JWT needs to have been issued by
-            .setExpectedAudience("Audience") // to whom the JWT is intended for
-            .setVerificationKey((Key) rsaJsonWebKey) // verify the signature with the public key
+            .setExpectedAudience(AUDIENCE) // to whom the JWT is intended for
+            .setVerificationKey(rsaJsonWebKey.getKey()) // verify the signature with the public key
             .setJwsAlgorithmConstraints( // only allow the expected signature algorithm(s) in the given context
                 AlgorithmConstraints.ConstraintType.WHITELIST,
                 AlgorithmIdentifiers.RSA_USING_SHA256
@@ -100,14 +103,38 @@ public class JwtTokenService {
     }
 
     public boolean verifyToken(String jwtTokenStr) throws Exception {
-        return verifyToken(jwtTokenStr, keyStore.getKey("k1").orElseThrow(()->new Exception("Invalid jwt")));
+        return verifyToken(jwtTokenStr, keyStore.getKey(getKeyId(jwtTokenStr)).orElseThrow(() -> new Exception("Invalid jwt")));
+    }
+
+    private String getKeyId(String jwt) throws Exception {
+        if(jwt ==null || jwt.isEmpty()) {
+            throw new Exception("Invalid access token");
+        }
+
+        List<JsonWebStructure> jws =
+            new JwtConsumerBuilder()
+                .setRequireExpirationTime()
+                .setSkipSignatureVerification()
+                .setAllowedClockSkewInSeconds(30)
+                .setRequireSubject()
+                .setExpectedIssuer(ISSUER)
+                .setExpectedAudience(AUDIENCE)
+                .build()
+                .process(jwt)
+                .getJoseObjects();
+
+        return jws.stream()
+            .findFirst()
+            .map(JsonWebStructure::getKeyIdHeaderValue)
+            .map(String::new)
+            .orElseThrow(() -> new Exception(
+                "No key information found in the provided access token!"));
     }
 
     public static void main(String[] args) throws Exception {
         JwtTokenService tokenUtil = new JwtTokenService();
         String jwt = tokenUtil.createJWT();
         System.out.println("JWT obtained is:" + jwt);
-
         System.out.println(tokenUtil.verifyToken(jwt));
     }
 }
