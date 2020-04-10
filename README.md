@@ -1,1 +1,1 @@
-# DropwizardDemo
+# OAuth2 Sample Application
