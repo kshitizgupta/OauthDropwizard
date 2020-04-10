@@ -7,6 +7,7 @@ import java.util.Optional;
 public class OAuthAuthenticator implements Authenticator<String, User> {
     @Override
     public Optional<User> authenticate(final String s) throws AuthenticationException {
+
         return Optional.empty();
     }
 }
