@@ -22,7 +22,7 @@ import org.jose4j.jwx.JsonWebStructure;
 import org.jose4j.lang.JoseException;
 
 public class JwtTokenService {
-    public static String ISSUER = "DropwizardDemo";
+    public static String ISSUER = "SampleOauthService";
     private final KeyStore keyStore = new KeyStore();
     final String AUDIENCE = "Audience";
 
