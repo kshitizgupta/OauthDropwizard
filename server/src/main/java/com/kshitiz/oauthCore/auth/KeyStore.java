@@ -1,4 +1,4 @@
-package com.howtodoinjava.auth;
+package com.kshitiz.oauthCore.auth;
 
 import java.util.HashMap;
 import java.util.Map;

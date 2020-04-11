@@ -1,8 +1,8 @@
-package com.howtodoinjava.rest.controllers;
+package com.kshitiz.oauthCore.rest.controllers;
 
-import com.howtodoinjava.auth.User;
-import com.howtodoinjava.dao.EmployeeDb;
-import com.howtodoinjava.model.Employee;
+import com.kshitiz.oauthCore.auth.User;
+import com.kshitiz.oauthCore.dao.EmployeeDb;
+import com.kshitiz.oauthCore.model.Employee;
 import io.dropwizard.auth.Auth;
 import java.util.List;
 import javax.ws.rs.GET;
@@ -17,14 +17,14 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class EmployeeController {
     //db object
-    private final EmployeeDb db;
+    private final EmployeeDb employeeDb;
 
     /**
      * Constructor.
      * @param empDb
      */
     public EmployeeController(final EmployeeDb empDb) {
-        db = empDb;
+        employeeDb = empDb;
     }
 
     /**
@@ -34,7 +34,7 @@ public class EmployeeController {
      */
     @GET
     public List<Employee> getEmployees(@Auth final User user) {
-        return db.getAll();
+        return employeeDb.getAll();
     }
 
     /**
@@ -45,7 +45,7 @@ public class EmployeeController {
     @GET
     @Path("/test")
     public Response getEmployeess(@Auth final User user) {
-        return Response.ok(db.getAll()).build();
+        return Response.ok(employeeDb.getAll()).build();
     }
 
     /**
@@ -56,7 +56,7 @@ public class EmployeeController {
     @GET
     @Path("/{id}")
     public Employee getEmployee(@PathParam("id") final int id) {
-        Employee employee = db.getById(id)
+        Employee employee = employeeDb.getById(id)
             .orElseThrow(() -> new NotFoundException("Employee with id = " + id + " was not found!"));
         return employee;
     }

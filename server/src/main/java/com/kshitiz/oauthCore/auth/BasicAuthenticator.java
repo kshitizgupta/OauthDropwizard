@@ -1,4 +1,4 @@
-package com.howtodoinjava.auth;
+package com.kshitiz.oauthCore.auth;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;

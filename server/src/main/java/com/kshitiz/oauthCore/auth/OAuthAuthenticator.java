@@ -1,4 +1,4 @@
-package com.howtodoinjava.auth;
+package com.kshitiz.oauthCore.auth;
 
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;

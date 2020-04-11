@@ -1,6 +1,6 @@
-package com.howtodoinjava.dao;
+package com.kshitiz.oauthCore.dao;
 
-import com.howtodoinjava.model.Employee;
+import com.kshitiz.oauthCore.model.Employee;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

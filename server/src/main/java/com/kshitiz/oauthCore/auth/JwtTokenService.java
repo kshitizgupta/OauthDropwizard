@@ -1,12 +1,8 @@
-package com.howtodoinjava.auth;
+package com.kshitiz.oauthCore.auth;
 
-import com.sun.jdi.request.InvalidRequestStateException;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-import org.glassfish.jersey.client.authentication.RequestAuthenticationException;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwk.RsaJsonWebKey;
 import org.jose4j.jwk.RsaJwkGenerator;

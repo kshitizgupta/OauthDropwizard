@@ -1,4 +1,4 @@
-package com.howtodoinjava.auth;
+package com.kshitiz.oauthCore.auth;
 
 import java.security.Principal;
 import java.util.Set;
