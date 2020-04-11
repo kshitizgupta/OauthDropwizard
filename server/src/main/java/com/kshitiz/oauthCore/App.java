@@ -1,12 +1,16 @@
-package com.kshitiz.oauthCore.rest;
+package com.kshitiz.oauthCore;
 
 import com.google.common.collect.ImmutableList;
 import com.kshitiz.oauthCore.auth.BasicAuthenticator;
 import com.kshitiz.oauthCore.auth.BasicAuthorizer;
+import com.kshitiz.oauthCore.auth.JwtTokenService;
+import com.kshitiz.oauthCore.auth.KeyStore;
 import com.kshitiz.oauthCore.auth.OAuthAuthenticator;
 import com.kshitiz.oauthCore.auth.User;
+import com.kshitiz.oauthCore.auth.grants.GrantFactory;
 import com.kshitiz.oauthCore.dao.EmployeeDb;
 import com.kshitiz.oauthCore.rest.controllers.EmployeeController;
+import com.kshitiz.oauthCore.rest.controllers.TokenController;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -32,7 +36,12 @@ public class App extends Application<Configuration> {
 
     @Override
     public void run(final Configuration configuration, final Environment e) throws Exception {
+        JwtTokenService tokenService = new JwtTokenService();
+        KeyStore keyStore = new KeyStore();
+        GrantFactory grantFactory = new GrantFactory(keyStore, tokenService);
+
         e.jersey().register(new EmployeeController(new EmployeeDb()));
+        e.jersey().register(new TokenController(grantFactory));
         //****** Dropwizard security - custom classes ***********/
         AuthFilter<BasicCredentials, User> basicAuthenticator = new BasicCredentialAuthFilter.Builder<User>()
             .setAuthenticator(new BasicAuthenticator())

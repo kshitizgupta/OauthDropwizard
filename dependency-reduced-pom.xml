@@ -38,7 +38,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>com.kshitiz.oauthCore.rest.App</mainClass>
+                  <mainClass>com.kshitiz.oauthCore.App</mainClass>
                 </transformer>
                 <transformer />
               </transformers>
