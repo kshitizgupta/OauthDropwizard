@@ -1,4 +1,4 @@
-package com.howtodoinjava.model;
+package com.kshitiz.oauthCore.model;
 
 public class Employee {
     private int id;

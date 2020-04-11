@@ -1,4 +1,4 @@
 /**
  * Controller classes hosting the apis.
  */
-package com.howtodoinjava.rest.controllers;
+package com.kshitiz.oauthCore.rest.controllers;

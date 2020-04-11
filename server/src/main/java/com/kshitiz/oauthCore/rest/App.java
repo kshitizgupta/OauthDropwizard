@@ -1,12 +1,12 @@
-package com.howtodoinjava.rest;
+package com.kshitiz.oauthCore.rest;
 
 import com.google.common.collect.ImmutableList;
-import com.howtodoinjava.auth.BasicAuthenticator;
-import com.howtodoinjava.auth.BasicAuthorizer;
-import com.howtodoinjava.auth.OAuthAuthenticator;
-import com.howtodoinjava.auth.User;
-import com.howtodoinjava.dao.EmployeeDb;
-import com.howtodoinjava.rest.controllers.EmployeeController;
+import com.kshitiz.oauthCore.auth.BasicAuthenticator;
+import com.kshitiz.oauthCore.auth.BasicAuthorizer;
+import com.kshitiz.oauthCore.auth.OAuthAuthenticator;
+import com.kshitiz.oauthCore.auth.User;
+import com.kshitiz.oauthCore.dao.EmployeeDb;
+import com.kshitiz.oauthCore.rest.controllers.EmployeeController;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.auth.AuthDynamicFeature;
