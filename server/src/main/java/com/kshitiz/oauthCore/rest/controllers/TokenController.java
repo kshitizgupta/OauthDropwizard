@@ -7,6 +7,7 @@ import com.kshitiz.oauthCore.auth.JwtTokenService;
 import com.kshitiz.oauthCore.auth.KeyStore;
 import com.kshitiz.oauthCore.auth.grants.GrantFactory;
 import com.kshitiz.oauthCore.auth.grants.Grants;
+import com.kshitiz.oauthCore.rest.dto.TokenResponse;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -26,13 +27,12 @@ public class TokenController {
     @POST
     @Consumes(APPLICATION_FORM_URLENCODED)
     @Produces(APPLICATION_JSON)
-    public String issueToken(
+    public TokenResponse issueToken(
         @NotNull @FormParam("client_id") String clientIdParam,
         @NotNull @FormParam("grant_type") String grantType,
         MultivaluedMap<String, String> formParams
     ) throws Exception {
-
         Grants grants = grantFactory.getGrant(grantType).orElseThrow(() -> new Exception("Illegal grant type"));
-        return grants.issueToken();
+        return new TokenResponse(grants.issueToken());
     }
 }
