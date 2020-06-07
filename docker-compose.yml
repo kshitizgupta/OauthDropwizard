@@ -5,3 +5,5 @@ services:
     ports:
       - "3600:8080"
     build: .
+  cassandra:
+    image: cassandra:latest
