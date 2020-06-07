@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.kshitiz.oauth</groupId>
-	<artifactId>OauthCore</artifactId>
+	<artifactId>oauth-sample</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<modules>
 		<module>server</module>

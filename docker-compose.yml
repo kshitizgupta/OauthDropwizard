@@ -1,0 +1,7 @@
+version: "3.7"
+
+services:
+  oauth:
+    ports:
+      - "3600:8080"
+    build: .
