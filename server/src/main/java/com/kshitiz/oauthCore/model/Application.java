@@ -48,6 +48,20 @@ public class Application {
         this.status = ApplicationStatus.ENABLED;
     }
 
+    public Application(
+        final UUID uuid,
+        final ApplicationStatus status,
+        @NotEmpty final String name,
+        final Set<URI> redirectUris,
+        final String hashedSecret
+    ) {
+        this.uuid = uuid;
+        this.status = status;
+        this.name = name;
+        this.redirectUris = redirectUris;
+        this.hashedSecret = hashedSecret;
+    }
+
     public UUID getUuid() {
         return uuid;
     }
