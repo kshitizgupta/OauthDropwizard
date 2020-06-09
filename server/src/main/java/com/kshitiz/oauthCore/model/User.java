@@ -1,4 +1,4 @@
-package com.kshitiz.oauthCore.auth;
+package com.kshitiz.oauthCore.model;
 
 import java.security.Principal;
 import java.util.Set;

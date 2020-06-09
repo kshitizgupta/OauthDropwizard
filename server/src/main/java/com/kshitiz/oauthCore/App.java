@@ -7,11 +7,13 @@ import com.kshitiz.oauthCore.auth.BasicAuthorizer;
 import com.kshitiz.oauthCore.auth.JwtTokenService;
 import com.kshitiz.oauthCore.auth.KeyStore;
 import com.kshitiz.oauthCore.auth.OAuthAuthenticator;
-import com.kshitiz.oauthCore.auth.User;
+import com.kshitiz.oauthCore.dao.ApplicationDao;
+import com.kshitiz.oauthCore.model.User;
 import com.kshitiz.oauthCore.auth.grants.GrantFactory;
 import com.kshitiz.oauthCore.dao.AuthenticationDao;
 import com.kshitiz.oauthCore.dao.CassandraSession;
 import com.kshitiz.oauthCore.dao.EmployeeDb;
+import com.kshitiz.oauthCore.rest.controllers.ApplicationResource;
 import com.kshitiz.oauthCore.rest.controllers.EmployeeController;
 import com.kshitiz.oauthCore.rest.controllers.TokenController;
 import io.dropwizard.Application;
@@ -51,6 +53,7 @@ public class App extends Application<Configuration> {
         AuthenticationService authenticationService = new AuthenticationService(authenticationDao);
 
         e.jersey().register(new EmployeeController(new EmployeeDb()));
+        e.jersey().register(new ApplicationResource(new ApplicationDao(session)));
         e.jersey().register(new TokenController(grantFactory, authenticationService));
         //****** Dropwizard security - custom classes ***********/
         AuthFilter<BasicCredentials, User> basicAuthenticator = new BasicCredentialAuthFilter.Builder<User>()

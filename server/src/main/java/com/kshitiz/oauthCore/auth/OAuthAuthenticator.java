@@ -1,5 +1,6 @@
 package com.kshitiz.oauthCore.auth;
 
+import com.kshitiz.oauthCore.model.User;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import java.util.Optional;

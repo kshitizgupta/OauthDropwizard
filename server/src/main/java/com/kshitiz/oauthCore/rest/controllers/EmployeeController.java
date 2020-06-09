@@ -1,6 +1,6 @@
 package com.kshitiz.oauthCore.rest.controllers;
 
-import com.kshitiz.oauthCore.auth.User;
+import com.kshitiz.oauthCore.model.User;
 import com.kshitiz.oauthCore.dao.EmployeeDb;
 import com.kshitiz.oauthCore.model.Employee;
 import io.dropwizard.auth.Auth;
