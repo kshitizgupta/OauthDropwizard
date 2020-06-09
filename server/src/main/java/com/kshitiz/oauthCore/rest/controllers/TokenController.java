@@ -3,8 +3,7 @@ package com.kshitiz.oauthCore.rest.controllers;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import com.kshitiz.oauthCore.auth.JwtTokenService;
-import com.kshitiz.oauthCore.auth.KeyStore;
+import com.kshitiz.oauthCore.auth.AuthenticationService;
 import com.kshitiz.oauthCore.auth.grants.GrantFactory;
 import com.kshitiz.oauthCore.auth.grants.Grants;
 import com.kshitiz.oauthCore.rest.dto.TokenResponse;
@@ -19,9 +18,14 @@ import javax.ws.rs.core.MultivaluedMap;
 @Path("/token")
 public class TokenController {
     private final GrantFactory grantFactory;
+    private final AuthenticationService authenticationService;
 
-    public TokenController(final GrantFactory grantFactory) {
+    public TokenController(
+        final GrantFactory grantFactory,
+        final AuthenticationService authenticationService
+    ) {
         this.grantFactory = grantFactory;
+        this.authenticationService = authenticationService;
     }
 
     @POST
@@ -33,6 +37,7 @@ public class TokenController {
         MultivaluedMap<String, String> formParams
     ) throws Exception {
         Grants grants = grantFactory.getGrant(grantType).orElseThrow(() -> new Exception("Illegal grant type"));
+        authenticationService.authenticateUser("abc", "abc");
         return new TokenResponse(grants.issueToken());
     }
 }

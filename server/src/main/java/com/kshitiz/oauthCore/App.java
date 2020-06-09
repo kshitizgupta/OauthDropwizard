@@ -1,6 +1,7 @@
 package com.kshitiz.oauthCore;
 
 import com.google.common.collect.ImmutableList;
+import com.kshitiz.oauthCore.auth.AuthenticationService;
 import com.kshitiz.oauthCore.auth.BasicAuthenticator;
 import com.kshitiz.oauthCore.auth.BasicAuthorizer;
 import com.kshitiz.oauthCore.auth.JwtTokenService;
@@ -8,6 +9,8 @@ import com.kshitiz.oauthCore.auth.KeyStore;
 import com.kshitiz.oauthCore.auth.OAuthAuthenticator;
 import com.kshitiz.oauthCore.auth.User;
 import com.kshitiz.oauthCore.auth.grants.GrantFactory;
+import com.kshitiz.oauthCore.dao.AuthenticationDao;
+import com.kshitiz.oauthCore.dao.CassandraSession;
 import com.kshitiz.oauthCore.dao.EmployeeDb;
 import com.kshitiz.oauthCore.rest.controllers.EmployeeController;
 import com.kshitiz.oauthCore.rest.controllers.TokenController;
@@ -38,10 +41,17 @@ public class App extends Application<Configuration> {
     public void run(final Configuration configuration, final Environment e) throws Exception {
         JwtTokenService tokenService = new JwtTokenService();
         KeyStore keyStore = new KeyStore();
+
         GrantFactory grantFactory = new GrantFactory(keyStore, tokenService);
 
+        CassandraSession session = new CassandraSession();
+
+        AuthenticationDao authenticationDao = new AuthenticationDao(session);
+
+        AuthenticationService authenticationService = new AuthenticationService(authenticationDao);
+
         e.jersey().register(new EmployeeController(new EmployeeDb()));
-        e.jersey().register(new TokenController(grantFactory));
+        e.jersey().register(new TokenController(grantFactory, authenticationService));
         //****** Dropwizard security - custom classes ***********/
         AuthFilter<BasicCredentials, User> basicAuthenticator = new BasicCredentialAuthFilter.Builder<User>()
             .setAuthenticator(new BasicAuthenticator())

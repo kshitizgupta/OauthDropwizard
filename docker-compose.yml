@@ -7,5 +7,6 @@ services:
     build: .
   cassandra:
     image: cassandra:latest
+    hostname: cassandra
     ports:
       - 9042:9042
