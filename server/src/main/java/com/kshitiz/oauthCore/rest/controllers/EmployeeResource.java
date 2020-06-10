@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/employees")
 @Produces(MediaType.APPLICATION_JSON)
-public class EmployeeController {
+public class EmployeeResource {
     //db object
     private final EmployeeDb employeeDb;
 
@@ -23,7 +23,7 @@ public class EmployeeController {
      * Constructor.
      * @param empDb
      */
-    public EmployeeController(final EmployeeDb empDb) {
+    public EmployeeResource(final EmployeeDb empDb) {
         employeeDb = empDb;
     }
 

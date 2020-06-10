@@ -21,12 +21,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.apache.commons.lang3.StringUtils;
 
 @Path("/token")
-public class TokenController {
+public class TokenResource {
     private final GrantFactory grantFactory;
     private final AuthenticationService authenticationService;
     private final ApplicationDao applicationDao;
 
-    public TokenController(
+    public TokenResource(
         final GrantFactory grantFactory,
         final AuthenticationService authenticationService,
         final ApplicationDao applicationDao
@@ -49,19 +49,20 @@ public class TokenController {
 
         boolean isValid = verifyCredentials(parseUUID(clientIdParam), clientSecret);
 
-        if(!isValid) {
+        if (!isValid) {
             throw new BadRequestException("Unauthorized client");
         }
-        authenticationService.authenticateUser("abc", "abc");
+
         return new TokenResponse(grants.issueToken());
     }
 
     private boolean verifyCredentials(final UUID clientIdParam, final String clientSecret) {
-        return StringUtils.isNotEmpty(clientSecret) && clientSecret.equals(getApplication(clientIdParam).getHashedSecret());
+        return StringUtils.isNotEmpty(clientSecret)
+            && clientSecret.equals(getApplication(clientIdParam).getHashedSecret());
     }
 
     private Application getApplication(final UUID clientId) {
-        return applicationDao.getApplication(clientId).orElseThrow(()-> new BadRequestException("invalid client id"));
+        return applicationDao.getApplication(clientId).orElseThrow(() -> new BadRequestException("invalid client id"));
     }
 
     private UUID parseUUID(String clientId) {
