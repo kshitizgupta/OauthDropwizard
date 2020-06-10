@@ -5,7 +5,7 @@ import com.kshitiz.oauthCore.auth.AuthenticationService;
 import com.kshitiz.oauthCore.auth.BasicAuthenticator;
 import com.kshitiz.oauthCore.auth.BasicAuthorizer;
 import com.kshitiz.oauthCore.auth.JwtTokenService;
-import com.kshitiz.oauthCore.auth.KeyStore;
+import com.kshitiz.oauthCore.auth.PrivateKeyStore;
 import com.kshitiz.oauthCore.auth.OAuthAuthenticator;
 import com.kshitiz.oauthCore.dao.ApplicationDao;
 import com.kshitiz.oauthCore.model.User;
@@ -42,9 +42,9 @@ public class App extends Application<Configuration> {
     @Override
     public void run(final Configuration configuration, final Environment e) throws Exception {
         JwtTokenService tokenService = new JwtTokenService();
-        KeyStore keyStore = new KeyStore();
+        PrivateKeyStore privateKeyStore = new PrivateKeyStore();
 
-        GrantFactory grantFactory = new GrantFactory(keyStore, tokenService);
+        GrantFactory grantFactory = new GrantFactory(privateKeyStore, tokenService);
 
         CassandraSession session = new CassandraSession();
 

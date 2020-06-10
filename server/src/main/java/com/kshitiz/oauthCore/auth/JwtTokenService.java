@@ -1,5 +1,7 @@
 package com.kshitiz.oauthCore.auth;
 
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +21,8 @@ import org.jose4j.lang.JoseException;
 
 public class JwtTokenService {
     public static String ISSUER = "SampleOauthService";
-    private final KeyStore keyStore = new KeyStore();
+    private final PrivateKeyStore privateKeyStore = new PrivateKeyStore();
+    private final PublicKeyStore publicKeyStore = new PublicKeyStore();
     final String AUDIENCE = "Audience";
 
     public String createJWT()
@@ -28,7 +31,8 @@ public class JwtTokenService {
         RsaJsonWebKey rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
         rsaJsonWebKey.setKeyId(String.valueOf(new Date().getTime()));
 
-        keyStore.addKey(rsaJsonWebKey);
+        privateKeyStore.addKey(rsaJsonWebKey);
+        publicKeyStore.setKey(rsaJsonWebKey.getKeyId(), rsaJsonWebKey.getPublicKey());
         // Create the claims
         JwtClaims claims = new JwtClaims();
         claims.setIssuer(ISSUER);
@@ -54,7 +58,7 @@ public class JwtTokenService {
         return jwt;
     }
 
-    private boolean verifyToken(final String jwtTokenStr, final RsaJsonWebKey rsaJsonWebKey)
+    private boolean verifyToken(final String jwtTokenStr, final PublicKey rsaJsonWebKey)
         throws MalformedClaimException {
 
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
@@ -64,7 +68,7 @@ public class JwtTokenService {
             .setRequireSubject() // the JWT must have a subject claim
             .setExpectedIssuer(ISSUER) // whom the JWT needs to have been issued by
             .setExpectedAudience(AUDIENCE) // to whom the JWT is intended for
-            .setVerificationKey(rsaJsonWebKey.getKey()) // verify the signature with the public key
+            .setVerificationKey(rsaJsonWebKey) // verify the signature with the public key
             .setJwsAlgorithmConstraints( // only allow the expected signature algorithm(s) in the given context
                 AlgorithmConstraints.ConstraintType.WHITELIST,
                 AlgorithmIdentifiers.RSA_USING_SHA256
@@ -99,11 +103,14 @@ public class JwtTokenService {
     }
 
     public boolean verifyToken(String jwtTokenStr) throws Exception {
-        return verifyToken(jwtTokenStr, keyStore.getKey(getKeyId(jwtTokenStr)).orElseThrow(() -> new Exception("Invalid jwt")));
+        return verifyToken(
+            jwtTokenStr,
+            publicKeyStore.getKey(getKeyId(jwtTokenStr)).orElseThrow(() -> new Exception("Invalid jwt"))
+        );
     }
 
     private String getKeyId(String jwt) throws Exception {
-        if(jwt ==null || jwt.isEmpty()) {
+        if (jwt == null || jwt.isEmpty()) {
             throw new Exception("Invalid access token");
         }
 
